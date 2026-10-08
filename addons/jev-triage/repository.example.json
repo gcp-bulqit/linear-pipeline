@@ -1,0 +1,17 @@
+{
+  "name": "webapp",
+  "contains": [
+    "The web application: its pages, components and client-side logic",
+    "Server-side API routes and background job code",
+    "Database schema and migrations; migrations run automatically on deploy",
+    "Email and notification code (message copy stored in the database is not here)",
+    "Tests and developer documentation"
+  ],
+  "does_not_contain": [
+    "Settings in third-party dashboards: payments, hosting, authentication, error tracking, email delivery",
+    "Environment variable values and secrets",
+    "Production data, and manual one-off data corrections",
+    "Content managed outside the repository: CMS pages, copy stored in the database",
+    "Business operations: billing, accounts, reports run by hand"
+  ]
+}
