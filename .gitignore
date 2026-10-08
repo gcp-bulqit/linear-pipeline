@@ -1,0 +1,13 @@
+# Pipeline runtime state and per-issue working material (created in the target repo, never here)
+.agent/state.json
+.agent/queue.json
+.agent/lock
+.agent/turbo-cache/
+.issues/
+__pycache__/
+*.pyc
+.DS_Store
+.agent/state.json.tmp
+.agent/triage.json
+.agent/cache/
+.agent/jev-triage/

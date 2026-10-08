@@ -1,0 +1,112 @@
+{
+  "linear": {
+    "user": "Pipeline Bot",
+    "mcpServer": "linear-bot",
+    "ingestState": "Todo",
+    "ingestLabel": null,
+    "reviewState": "In Review",
+    "ingestSources": [
+      {
+        "name": "bot-queue",
+        "user": "Pipeline Bot",
+        "state": "Todo",
+        "label": null,
+        "priority": null,
+        "note": "Every Todo issue assigned to the bot, any priority."
+      },
+      {
+        "name": "reviewed-shortlist",
+        "user": "Pipeline Bot",
+        "state": "Backlog",
+        "priority": [2, 3],
+        "ids": ["ENG-101", "ENG-102", "ENG-107"],
+        "note": "A hand-reviewed shortlist pulled from Backlog."
+      }
+    ],
+    "codeChangesOnly": {
+      "enabled": true,
+      "onAmbiguous": "skip"
+    },
+    "unparkIgnorePatterns": [
+      "^changed feedback status to \".*\" in \\w+$"
+    ]
+  },
+  "verify": [
+    { "name": "lint",        "command": "pnpm lint" },
+    { "name": "typecheck",   "command": "pnpm typecheck" },
+    { "name": "test",        "command": "pnpm turbo run test" },
+    { "name": "integration", "command": "pnpm --filter @acme/db migrate && pnpm turbo run test:integration" }
+  ],
+  "verifyKnownFlakes": [
+    {
+      "step": "test",
+      "kind": "testFailure",
+      "package": "@acme/core",
+      "packageDir": "packages/core",
+      "file": "src/__tests__/scheduler.test.ts",
+      "rerunCommand": "npx vitest run {file}",
+      "exemptIfBranchTouches": ["packages/core/src/scheduler/**"],
+      "why": "Runs about 5.2s against the 5s default timeout on main itself.",
+      "approved": "operator 2026-01-01",
+      "removeWhen": "ENG-456 raises the timeout"
+    }
+  ],
+  "gate": {
+    "preCommands": ["pnpm install --frozen-lockfile --prefer-offline"],
+    "perSlotEnv": { "TURBO_CACHE_DIR": "{root}/.agent/cache/s{slot}" },
+    "unsetEnv": ["PGHOST", "PGPORT"],
+    "maxLoadAvg": 8,
+    "loadWaitSeconds": 600,
+    "flakeParser": "vitest",
+    "logTailChars": 20000
+  },
+  "git": {
+    "baseBranch": "main",
+    "branchPrefix": "agent",
+    "worktreeDir": ".claude/worktrees",
+    "prMode": "draft",
+    "attribution": "none",
+    "attributionMarkers": ["Co-Authored-By", "Generated with", "Claude Code"],
+    "requireSigned": false
+  },
+  "pr": {
+    "titleFormat": "[{id}] {summary}",
+    "templatePath": ".github/pull_request_template.md"
+  },
+  "docs": {
+    "root": "docs/"
+  },
+  "limits": {
+    "maxCycles": 3,
+    "maxRediscovery": 1,
+    "workerStepRetries": 2,
+    "maxConcurrent": 3
+  },
+  "admission": {
+    "serializeMigrations": true
+  },
+  "database": {
+    "baseUrlEnv": "DB_URL",
+    "urlEnvNames": ["DB_URL", "DATABASE_URL"],
+    "baseDatabase": "app",
+    "slotTemplate": "app_template",
+    "slotPrefix": "app_s",
+    "siblingSuffixes": ["_test"],
+    "siblingMigrateCommand": "pnpm --filter @acme/db migrate",
+    "migrationsHighWaterSql": null
+  },
+  "clock": {
+    "minSeconds": 1200,
+    "maxSeconds": 1800
+  },
+  "lock": {
+    "staleAfterMinutes": 30
+  },
+  "models": {
+    "discovery":     { "model": "sonnet", "effort": "medium" },
+    "planner":       { "model": "opus",   "effort": "high"   },
+    "worker":        { "model": "sonnet", "effort": "medium" },
+    "reviewer":      { "model": "opus",   "effort": "high"   },
+    "documentation": { "model": "sonnet", "effort": "medium" }
+  }
+}
