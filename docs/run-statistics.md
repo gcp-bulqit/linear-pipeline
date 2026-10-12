@@ -405,7 +405,7 @@ tickets into buckets:
 | PR plus an operational step | 10 |
 | Already resolved | 5 |
 
-**Evaluation against hand labels** (54 tickets: 28 labelled PR-able, 26 not):
+**Evaluation against labels built from the pipeline's records** (54 tickets: 28 labelled PR-able, 26 not):
 
 | Positive prediction | Precision | Recall | TP / FP / FN / TN |
 |---|---:|---:|---|
@@ -427,7 +427,7 @@ Shipped shortlist PRs passed on the first attempt 27 of 33 times (**81.8%**), me
 
 - The shortlist comparison is **confounded**: every shipped shortlist ticket ran in the five-slot run,
   so the effects of the shortlist and of concurrency cannot be separated.
-- The hand-labelled set is small (54 tickets).
+- The labelled set is small (54 tickets), and its labels come from the pipeline's records, not a person reading each ticket.
 - Recall of 50% means the classifier missed half the PR-able tickets. It was useful for building a
   high-yield queue, not for deciding what to ignore.
 
@@ -491,7 +491,7 @@ categorised by hand. Counts are of **records**, not of distinct root causes.
 - *Code host:* the PR list, per-PR commit counts, and per-file changes used to exclude generated files.
 - *Linear:* an export of issues with status and created and completed dates. There is no status
   history, so time spent in each Linear status cannot be derived.
-- *Triage artifacts:* classifier results, hand labels, evaluation and backtests.
+- *Triage artifacts:* classifier results, labels derived from run records, evaluation and backtests.
 
 **Not computable from the record.**
 
